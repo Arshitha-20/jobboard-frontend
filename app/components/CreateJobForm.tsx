@@ -13,6 +13,7 @@ import {
 import { DateInput } from '@mantine/dates';
 import { useForm, Controller } from 'react-hook-form';
 import { Select } from '@mantine/core';
+import { createJob } from '../api/api';
 
 interface JobFormData {
   title: string;
@@ -38,7 +39,7 @@ export default function CreateJobForm({ onSuccess }: { onSuccess: () => void }) 
       description: '',
     },
   });
-import { createJob } from '../api/api';
+
 
   const onSubmit = async (data: JobFormData) => {
   console.log('Form submitted:', data);
