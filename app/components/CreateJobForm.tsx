@@ -38,6 +38,7 @@ export default function CreateJobForm({ onSuccess }: { onSuccess: () => void }) 
       description: '',
     },
   });
+import { createJob } from '../api/api';
 
   const onSubmit = async (data: JobFormData) => {
   console.log('Form submitted:', data);
