@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { getJobs } from '../api/api';
+
 
 interface Job {
   title: string;
@@ -9,9 +11,8 @@ interface Job {
 
 export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
-import { getJobs } from '../api/api';
 
-  import { getJobs } from '../api';
+ 
 
 useEffect(() => {
   const fetchJobs = async () => {
