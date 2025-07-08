@@ -11,7 +11,7 @@ export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/jobs')
+    fetch('https://jobboard-backend-rfjn.onrender.com')
       .then(res => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
