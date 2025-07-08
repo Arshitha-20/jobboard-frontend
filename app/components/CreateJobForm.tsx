@@ -13,7 +13,6 @@ import {
 import { DateInput } from '@mantine/dates';
 import { useForm, Controller } from 'react-hook-form';
 import { Select } from '@mantine/core';
-import { createJob } from '../api/api';
 
 interface JobFormData {
   title: string;
@@ -40,22 +39,18 @@ export default function CreateJobForm({ onSuccess }: { onSuccess: () => void }) 
     },
   });
 
+  const onSubmit = async (data: JobFormData) => {
+  console.log('Form submitted:', data);
+  alert('Submitting to backend!');
 
-  
-  
-
- useEffect(() => {
-  fetch('https://jobboard-backend-rfjn.onrender.com')
-    .then(res => {
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then(data => setJobs(data))
-    .catch(err => console.error('Error fetching jobs:', err));
-}, []);
-
+  try {
+    const response = await fetch('https://jobboard-backend-rfjn.onrender.com', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
 
     if (!response.ok) {
       throw new Error(`Server error: ${response.status}`);
