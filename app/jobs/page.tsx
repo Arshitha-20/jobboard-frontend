@@ -9,6 +9,7 @@ interface Job {
 
 export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
+import { getJobs } from '../api/api';
 
   useEffect(() => {
     fetch('https://jobboard-backend-rfjn.onrender.com')
