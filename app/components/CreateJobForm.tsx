@@ -41,18 +41,22 @@ export default function CreateJobForm({ onSuccess }: { onSuccess: () => void }) 
   });
 
 
-  const onSubmit = async (data: JobFormData) => {
-  console.log('Form submitted:', data);
-  alert('Submitting to backend!');
+  
+  
 
+ const onSubmit = async (data) => {
+   console.log('Form submitted:', data);
+  alert('Submitting to backend!');
   try {
-    const response = await fetch('https://jobboard-backend-rfjn.onrender.com', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    await createJob(data);
+    alert('✅ Job created!');
+    reset();
+    if (onSuccess) onSuccess();
+  } catch (error) {
+    console.error('❌ Error creating job:', error);
+    alert(`❌ Error: ${error}`);
+  }
+};
 
     if (!response.ok) {
       throw new Error(`Server error: ${response.status}`);
