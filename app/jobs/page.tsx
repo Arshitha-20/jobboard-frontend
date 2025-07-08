@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getJobs } from '../api/api';
-
 
 interface Job {
   title: string;
@@ -12,20 +10,22 @@ interface Job {
 export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
 
- 
-
-useEffect(() => {
-  const fetchJobs = async () => {
-    try {
-      const data = await getJobs();
-      setJobs(data);
-    } catch (error) {
-      console.error('Error fetching jobs:', error);
-    }
-  };
-
-  fetchJobs();
-}, []);
+  useEffect(() => {
+    fetch('https://jobboard-backend-rfjn.onrender.com')
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log('Fetched jobs:', data); // ✅ Check this in browser console
+        setJobs(data);
+      })
+      .catch((err) => {
+        console.error('Error fetching jobs:', err);
+      });
+  }, []);
 
   return (
     <div style={{ padding: 20 }}>
