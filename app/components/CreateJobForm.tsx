@@ -44,7 +44,7 @@ export default function CreateJobForm({ onSuccess }: { onSuccess: () => void }) 
   alert('Submitting to backend!');
 
   try {
-    const response = await fetch('https://jobboard-backend-rfjn.onrender.com', {
+    const response = await fetch('https://jobboard-backend-rfjn.onrender.com/jobs', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
