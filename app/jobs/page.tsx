@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import JobCard from './JobCard'; // adjust path if needed
-
+import JobCard from '../components/JobCard';
 interface Job {
   id: number;
   title: string;
