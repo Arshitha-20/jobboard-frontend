@@ -1,4 +1,4 @@
-'use client';
+/*'use client';
 
 import { useEffect, useState } from 'react';
 import { Box, Flex, Text } from '@mantine/core';
@@ -67,3 +67,4 @@ export default function DynamicFrame() {
     </Box>
   );
 }
+*/
