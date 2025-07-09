@@ -23,7 +23,7 @@ export default function DynamicFrame() {
 
   useEffect(() => {
     axios
-      .get<Job[]>('http://localhost:3001/jobs')
+      .get<Job[]>('https://jobboard-backend-rfjn.onrender.com/jobs')
       .then((res) => setJobs(res.data))
       .catch((err) => console.error('Error fetching jobs:', err));
   }, []);
