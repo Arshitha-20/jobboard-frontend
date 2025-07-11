@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <ColorSchemeScript />
       </head>
-      <body style={{ backgroundColor: 'white' }} className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body style={{ backgroundColor: '#FAFAFA' }} className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <MantineProvider defaultColorScheme="light">
           {children}
         </MantineProvider>
