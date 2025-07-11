@@ -82,6 +82,7 @@ export default function FrameOne({   onFilter,
       <Modal
         opened={opened}
         onClose={close}
+        withCloseButton={false} 
         size="xl"
         centered
         overlayProps={{ blur: 3, opacity: 0.55 }}
