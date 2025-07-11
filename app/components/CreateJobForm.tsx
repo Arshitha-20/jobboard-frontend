@@ -1,14 +1,14 @@
 'use client';
 
 import {
-  Card,
-  Text,
   TextInput,
   Button,
+  Text,
   Textarea,
   Group,
   NumberInput,
   Flex,
+  Box,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm, Controller } from 'react-hook-form';
@@ -40,189 +40,173 @@ export default function CreateJobForm({ onSuccess }: { onSuccess: () => void }) 
   });
 
   const onSubmit = async (data: JobFormData) => {
-  console.log('Form submitted:', data);
-  alert('Submitting to backend!');
+    console.log('Form submitted:', data);
+    alert('Submitting to backend!');
 
-  try {
-    const response = await fetch('https://jobboard-backend-rfjn.onrender.com/jobs', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    try {
+      const response = await fetch('https://jobboard-backend-rfjn.onrender.com/jobs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-    if (!response.ok) {
-      throw new Error(`Server error: ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      alert('Job created!');
+      onSuccess();
+    } catch (error) {
+      alert(`Error: ${error}`);
+      console.error('❌ Error creating job:', error);
     }
-
-    alert('Job created!');
-    onSuccess();
-  } catch (error) {
-    alert(`Error: ${error}`);
-    console.error('❌ Error creating job:', error);
-  }
-};
-
+  };
 
   return (
-    <Card
-      withBorder
-      shadow="md"
-      radius="lg"
-      p="xl"
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
       style={{
-        width: '100%',
-        maxWidth: 800,   // Expanded width
+        maxWidth: 700,
         margin: '0 auto',
+        padding: '24px',
+        borderRadius: '25px',
+        // Light background to make it look like a card without a border
       }}
     >
-      <Text fw={600} size="lg" mb="lg" ta="center">
+      <Text ta="center" fw={600} size="lg" mb="lg">
         Create Job Opening
       </Text>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <Flex
+        direction="row"
+        gap="md"
+        wrap="wrap"
+        justify="flex-start"
+        align="flex-start"
+      >
+        <TextInput
+          label="Job Title"
+          placeholder="Full Stack Developer"
+          {...register('title')}
+          style={{ flex: '1 1 300px' }}
+        />
+
+        <TextInput
+          label="Company Name"
+          placeholder="Amazon, Microsoft, Swiggy"
+          {...register('company')}
+          style={{ flex: '1 1 300px' }}
+        />
+
+        <Controller
+          control={control}
+          name="location"
+          render={({ field }) => (
+            <Select
+              label="Location"
+              placeholder="Choose Preferred Location"
+              data={['Chennai', 'Bangalore', 'Hyderabad']}
+              {...field}
+              style={{ flex: '1 1 300px' }}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="jobType"
+          render={({ field }) => (
+            <Select
+              label="Job Type"
+              placeholder="Full Time"
+              data={['Internship', 'Full Time', 'Part Time', 'Contract']}
+              {...field}
+              style={{ flex: '1 1 300px' }}
+            />
+          )}
+        />
+
         <Flex
-          direction="row"
           gap="md"
-          wrap="wrap"
-          justify="flex-start"
-          align="flex-start"
+          wrap="nowrap"
+          style={{
+            width: '100%',
+            overflowX: 'auto',
+          }}
         >
-          <TextInput
-            label="Job Title"
-            placeholder="Full Stack Developer"
-            {...register('title')}
-            style={{ flex: '1 1 300px' }}
-          />
-
-          <TextInput
-            label="Company Name"
-            placeholder="Amazon, Microsoft, Swiggy"
-            {...register('company')}
-            style={{ flex: '1 1 300px' }}
-          />
-
           <Controller
             control={control}
-            name="location"
+            name="salaryMin"
             render={({ field }) => (
-              <Select
-                label="Location"
-                placeholder="Choose Preferred Location"
-                data={['Chennai', 'Bangalore', 'Hyderabad']}
-                {...field}
-                style={{ flex: '1 1 300px' }}
+              <NumberInput
+                label="Salary Min"
+                placeholder="₹0"
+                min={0}
+                step={10000}
+                value={Number(field.value)}
+                onChange={(val) => field.onChange(val ?? 0)}
+                style={{ flex: '1 1 0', minWidth: 200 }}
               />
             )}
           />
 
           <Controller
             control={control}
-            name="jobType"
+            name="salaryMax"
             render={({ field }) => (
-              <Select
-                label="Job Type"
-                placeholder="Full Time"
-                data={['Internship', 'Full Time', 'Part Time', 'Contract']}
-                {...field}
-                style={{ flex: '1 1 300px' }}
+              <NumberInput
+                label="Salary Max"
+                placeholder="₹12,00,000"
+                min={0}
+                step={10000}
+                value={Number(field.value)}
+                onChange={(val) => field.onChange(val ?? 0)}
+                style={{ flex: '1 1 0', minWidth: 200 }}
               />
             )}
           />
 
-          {/* Salary Min / Max / Deadline on one row */}
-          <Flex
-            gap="md"
-            wrap="nowrap"    // Force single line
-            style={{
-              width: '100%',
-              overflowX: 'auto',
-            }}
-          >
-            <Controller
-              control={control}
-              name="salaryMin"
-              render={({ field }) => (
-                <NumberInput
-                  label="Salary Min"
-                  placeholder="₹0"
-                  min={0}
-                  step={10000}
-                  value={Number(field.value)}
-                  onChange={(val) => field.onChange(val ?? 0)}
-                  style={{ flex: '1 1 0', minWidth: 200 }}
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="salaryMax"
-              render={({ field }) => (
-                <NumberInput
-                  label="Salary Max"
-                  placeholder="₹12,00,000"
-                  min={0}
-                  step={10000}
-                  value={Number(field.value)}
-                  onChange={(val) => field.onChange(val ?? 0)}
-                  style={{ flex: '1 1 0', minWidth: 200 }}
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="deadline"
-              render={({ field }) => (
-                <DateInput
-                  label="Application Deadline"
-                  placeholder="Select Date"
-                  value={field.value}
-                  onChange={field.onChange}
-                  style={{ flex: '1 1 0', minWidth: 200 }}
-                />
-              )}
-            />
-          </Flex>
-
-          <Textarea
-            label="Job Description"
-            placeholder="Please share a description to let the candidate know more about the job role"
-            autosize
-            minRows={4}
-            {...register('description')}
-            style={{ flex: '1 1 100%' }}
+          <Controller
+            control={control}
+            name="deadline"
+            render={({ field }) => (
+              <DateInput
+                label="Application Deadline"
+                placeholder="Select Date"
+                value={field.value}
+                onChange={field.onChange}
+                style={{ flex: '1 1 0', minWidth: 200 }}
+              />
+            )}
           />
         </Flex>
 
-        <Group justify="space-between" mt="xl">
-          <Button
-            variant="outline"
-            color="dark"
-            type="button"
-            radius="md"
-            style={{
-              padding: '10px 24px',
-              border: '1px solid black',
-            }}
-          >
-            Save Draft
-          </Button>
-          <Button
-            type="submit"
-            radius="md"
-            style={{
-              backgroundColor: '#00AAFF',
-              color: 'white',
-              padding: '10px 24px',
-            }}
-          >
-            Publish →
-          </Button>
-        </Group>
-      </form>
-    </Card>
+        <Textarea
+          label="Job Description"
+          placeholder="Please share a description to let the candidate know more about the job role"
+          autosize
+          minRows={4}
+          {...register('description')}
+          style={{ flex: '1 1 100%' }}
+        />
+      </Flex>
+
+      <Group justify="flex-end" mt="xl">
+        <Button
+          type="submit"
+          radius="md"
+          style={{
+            backgroundColor: '#00AAFF',
+            color: 'white',
+            padding: '10px 24px',
+          }}
+        >
+          Publish →
+        </Button>
+      </Group>
+    </Box>
   );
 }
