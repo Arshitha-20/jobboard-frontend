@@ -1,65 +1,69 @@
+
+
 'use client';
 
 import { useEffect, useState } from 'react';
-import JobCard from '../components/JobCard';
-interface Job {
-  id: number;
-  title: string;
-  company: string;
-  location?: string;
-  jobType?: string;
-  salaryMin?: number;
-  salaryMax?: number;
-  deadline?: string;
-  description?: string;
-}
+
+import FrameShowingJobs, { Job } from '../components/FrameShowingJobs';
+import FrameOne from '../components/FrameOne';
+import { frame2Jobs } from '../components/Frame2';
+import { frame3Jobs } from '../components/Frame3';
+
+
+
 
 export default function JobsPage() {
+  const allJobs: Job[] = [...frame2Jobs, ...frame3Jobs];
   const [jobs, setJobs] = useState<Job[]>([]);
 
-  useEffect(() => {
+ // Make sure to import useEffect, useState
+
+useEffect(() => {
     fetch('https://jobboard-backend-rfjn.onrender.com/jobs')
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then(data => {
-        console.log('Fetched jobs:', data);
+    .then(res => res.json())
+    .then(data => {
+      // If your backend returns { jobs: [...] }
+      if (Array.isArray(data)) {
         setJobs(data);
-      })
-      .catch(err => {
-        console.error('Error fetching jobs:', err);
-      });
-  }, []);
+      } else if (Array.isArray(data.jobs)) {
+        setJobs(data.jobs);
+      } else {
+        console.error('Unexpected data format:', data);
+        setJobs([]); // fallback
+      }
+    })
+    .catch(err => {
+      console.error('Error fetching jobs:', err);
+      setJobs([]);
+    });
+}, []);
+
 
   return (
-    <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-      <h1 style={{ textAlign: 'center' }}>Jobs List</h1>
-
+    <div style={{ padding: 20 }}>
+      <h1>Jobs List</h1>
       {jobs.length === 0 ? (
-        <p style={{ textAlign: 'center' }}>No jobs found.</p>
+        <p>No jobs found.</p>
       ) : (
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '20px',
-          justifyContent: 'center'
-        }}>
-          {jobs.map((job) => (
-            <JobCard
-              key={job.id}
-              title={job.title}
-              experience={'0-1 Yr Exp'}
-              type={job.jobType ?? 'Full Time'}
-              salary={`₹${job.salaryMin ?? 0} - ₹${job.salaryMax ?? 0}`}
-              posted={job.deadline ? new Date(job.deadline).toLocaleDateString() : 'N/A'}
-              description={job.description}
-            />
+        <ul>
+          {jobs.map((job, index) => (
+            <li key={index}>
+              <strong>{job.title}</strong> 
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );
+   const handleFilter = (filteredJobs: Job[]) => {
+    setJobs(filteredJobs);
+  };
+
+  return (
+    <div style={{ backgroundColor: '#FAFAFA' }}>
+      <FrameOne onFilter={handleFilter} allJobs={allJobs} />
+    </div>
+  );
+
 }
+
