@@ -13,6 +13,7 @@ import {
 import { DateInput } from '@mantine/dates';
 import { useForm, Controller } from 'react-hook-form';
 import { Select } from '@mantine/core';
+import { IconChevronDown } from '@tabler/icons-react'; // ✅ NEW IMPORT
 
 interface JobFormData {
   title: string;
@@ -44,7 +45,7 @@ export default function CreateJobForm({ onSuccess }: { onSuccess: () => void }) 
     alert('Submitting to backend!');
 
     try {
-      const response = await fetch('https://jobboard-backend-rfjn.onrender.com/jobs', {
+      const response = await fetch('http://localhost:3001/jobs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +74,6 @@ export default function CreateJobForm({ onSuccess }: { onSuccess: () => void }) 
         margin: '0 auto',
         padding: '24px',
         borderRadius: '25px',
-        // Light background to make it look like a card without a border
       }}
     >
       <Text ta="center" fw={600} size="lg" mb="lg">
@@ -194,7 +194,20 @@ export default function CreateJobForm({ onSuccess }: { onSuccess: () => void }) 
         />
       </Flex>
 
-      <Group justify="flex-end" mt="xl">
+      <Group justify="space-between" mt="xl">
+        <Button
+          variant="outline"
+          color="dark"
+          radius="md"
+          rightSection={<IconChevronDown size={16} />}
+          style={{
+            padding: '10px 24px',
+            border: '1px solid black',
+          }}
+        >
+          Draft
+        </Button>
+
         <Button
           type="submit"
           radius="md"
